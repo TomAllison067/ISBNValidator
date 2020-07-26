@@ -5,52 +5,50 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class StockManagementTests {
-
+	// J Steinbeck's Of Mice and Men
+	final static String CORRECT_ISBN = "0140177396";
+	final static String CORRECT_LOCATOR_CODE = "7396J4";
+	final static Book OF_MICE_AND_MEN = new Book(CORRECT_ISBN, "Of Mice And Men", "J. Steinbeck");
+	
+	/**
+	 * Tests whether, given any ISBN and returning a specific book, StockManager can
+	 * get the correct locator code.
+	 */
 	@Test
 	void testCanGetACorrectLocatorCode() {
-		/*
-		 * In production, we would of course give stockManager a proper implementation
-		 *  of ExternalISBNDataService that calls a third party web service.
-		 *  In this test, we can override that with our own implementation of
-		 *  the interface.
-		 *  
-		 *  So, testService is a simulation of an external 3rd party web service
-		 *  would be doing - because we are testing the business logic of calculating
-		 *  the correct locator code, NOT the 3rd party web service.
-		 */
-		
-		/*
-		 * So, we have created a test stub. A test stub is a replacement for an object
-		 * that the class we are testing has a dependency on.
-		 */
-		ExternalISBNDataService testWebService = new ExternalISBNDataService() {
 
-			@Override
-			public Book lookup(String isbn) {
-				return new Book(isbn, "Of Mice And Men", "J. Steinbeck");
-			}
-			
-		};
+//		ExternalISBNDataService testWebService = new ExternalISBNDataService() {
+//
+//			@Override
+//			public Book lookup(String isbn) {
+//				return new Book(isbn, "Of Mice And Men", "J. Steinbeck");
+//			}
+//			
+//		};
+//		
+//		ExternalISBNDataService testDatabaseService = new ExternalISBNDataService() {
+//
+//			@Override
+//			public Book lookup(String isbn) {
+//				return null;
+//			}
+//			
+//		};
 		
-		ExternalISBNDataService testDatabaseService = new ExternalISBNDataService() {
-
-			@Override
-			public Book lookup(String isbn) {
-				return null;
-			}
-			
-		};
+		ExternalISBNDataService webService = mock(ExternalISBNDataService.class);
+		when(webService.lookup(anyString())).thenReturn(OF_MICE_AND_MEN);
+		
+		ExternalISBNDataService databaseService = mock(ExternalISBNDataService.class);
+		when(databaseService.lookup(anyString())).thenReturn(null);
+		
+		
 		StockManager stockManager = new StockManager();
-		stockManager.setWebService(testWebService);
-		stockManager.setDatabaseService(testDatabaseService);
+		stockManager.setWebService(webService);
+		stockManager.setDatabaseService(databaseService);
 		
-		// J Steinbeck's Of Mice and Men
-		String isbn = "0140177396";
 		
-		String locatorCode = stockManager.getLocatorCode(isbn);
-		/* Last four digits of ISBN, the initial of the author
-		 * and number of words in the title. */
-		assertEquals("7396J4", locatorCode);
+		String locatorCode = stockManager.getLocatorCode(CORRECT_ISBN);
+		assertEquals(CORRECT_LOCATOR_CODE ,locatorCode);
 	}
 	
 	/**

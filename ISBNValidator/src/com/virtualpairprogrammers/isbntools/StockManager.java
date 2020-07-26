@@ -1,5 +1,12 @@
 package com.virtualpairprogrammers.isbntools;
 
+/**
+ * Class that allows us to get stock locator codes from a database service or a
+ * web service given a book's ISBN.
+ * 
+ * @author tom
+ *
+ */
 public class StockManager {
 
 	private ExternalISBNDataService webService;
@@ -13,6 +20,15 @@ public class StockManager {
 		this.databaseService = databaseService;
 	}
 
+	/**
+	 * Returns a stock locator code given a book's ISBN. A locator code consists of
+	 * the last 4 digits of the ISBN, the initial of the author, and a digit
+	 * corresponding to the number of words in the book's title.
+	 * 
+	 * Queries the database service first - and if the result is null, queries the web service.
+	 * @param isbn
+	 * @return a locator code.
+	 */
 	public String getLocatorCode(String isbn) {
 		Book book = databaseService.lookup(isbn);
 		if (book == null)

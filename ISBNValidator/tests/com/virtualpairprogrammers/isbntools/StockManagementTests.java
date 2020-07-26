@@ -3,7 +3,6 @@ package com.virtualpairprogrammers.isbntools;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class StockManagementTests {
 
@@ -54,10 +53,12 @@ class StockManagementTests {
 		assertEquals("7396J4", locatorCode);
 	}
 	
-	// Testing the behaviours
+	/**
+	 * Tests if the database service is called and the web service is not called, provided the database service exists.
+	 * For myself: This is testing the behaviour (which methods are called) rather than the logic of the lookup method.
+	 */
 	@Test
 	public void databaseIsUsedIfDataIsPresent() {
-		// Here we check if databaseService.lookup is called - not what the locator code is.
 		ExternalISBNDataService databaseService = mock(ExternalISBNDataService.class);
 		ExternalISBNDataService webService = mock(ExternalISBNDataService.class);
 		
@@ -75,6 +76,9 @@ class StockManagementTests {
 		verify(webService, never()).lookup(anyString());
 	}
 	
+	/**
+	 * Tests that the web service is used if the database service is not present.
+	 */
 	@Test
 	public void webServiceIsUsedIfDataIsNotPresentInDatabase() {
 		ExternalISBNDataService databaseService = mock(ExternalISBNDataService.class);

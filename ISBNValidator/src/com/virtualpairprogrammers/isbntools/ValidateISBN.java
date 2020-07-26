@@ -1,5 +1,10 @@
 package com.virtualpairprogrammers.isbntools;
 
+/**
+ * A class to check whether a string is a valid 10-digit or 13-digit ISBN number.
+ * @author tom
+ *
+ */
 public class ValidateISBN {
 
 	private static final int LONG_ISBN_MULTIPLIER = 10;

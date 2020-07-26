@@ -1,5 +1,10 @@
 package com.virtualpairprogrammers.isbntools;
 
+/**
+ * Class to describe a book.
+ * @author tom
+ *
+ */
 public class Book {
 	private String isbn;
 	private String title;
